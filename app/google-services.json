@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "54204325718",
+    "firebase_url": "https://grasi-gas-diaria.firebaseio.com",
+    "project_id": "grasi-gas-diaria",
+    "storage_bucket": "grasi-gas-diaria.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:54204325718:android:35f65ef4eef6b78c",
+        "android_client_info": {
+          "package_name": "com.designfreed.grasigas_app_diaria"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "54204325718-4a6neqc7669r7jecu151t29v4gceb4jl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.designfreed.grasigas_app_diaria",
+            "certificate_hash": "1483cc98c2befcb4b04eab726559debd29dd94fa"
+          }
+        },
+        {
+          "client_id": "54204325718-qv9018bl9rv6dakg45pe7bh57bhkc060.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvLDZvXpWsT5esSOET9AZkpY-YJoRK4LY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "54204325718-qv9018bl9rv6dakg45pe7bh57bhkc060.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

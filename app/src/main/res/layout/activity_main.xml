@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context="com.designfreed.grasigas_app_diaria.MainActivity">
+
+    <EditText
+        android:id="@+id/kilos_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:padding="10dp"
+        android:background="@drawable/edit_text"
+        android:inputType="numberDecimal"
+        android:hint="Kilos"/>
+
+    <EditText
+        android:id="@+id/pesos_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/kilos_field"
+        android:padding="10dp"
+        android:background="@drawable/edit_text"
+        android:inputType="numberDecimal"
+        android:hint="Pesos"/>
+
+    <LinearLayout
+        android:id="@+id/cantidad"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pesos_field">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:text="Cantidad de Clientes"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/visitas_field"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:layout_marginRight="5dp"
+                android:padding="10dp"
+                android:background="@drawable/edit_text"
+                android:inputType="number"
+                android:textAlignment="center"
+                android:hint="Visitados"/>
+
+            <EditText
+                android:id="@+id/ventas_field"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:layout_marginLeft="5dp"
+                android:padding="10dp"
+                android:background="@drawable/edit_text"
+                android:inputType="number"
+                android:textAlignment="center"
+                android:hint="Vendidos"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/cargar_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorAccent"
+        android:textColor="@color/black"
+        android:elevation="2dp"
+        android:text="Cargar"/>
+</RelativeLayout>
