@@ -11,10 +11,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.designfreed.grasigas_app_diaria.model.Venta;
+import com.designfreed.grasigas_app_diaria.model.Movimiento;
+import com.designfreed.grasigas_app_diaria.model.Vta;
+import com.designfreed.grasigas_app_diaria.service.MovimientoService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.io.IOException;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -71,6 +82,53 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.0.3:3000/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        MovimientoService service = retrofit.create(MovimientoService.class);
+
+        Call<List<Movimiento>> call1 = service.getMovimientos("14/06/2017", "15/06/2017");
+
+        Log.i("Endpoint URL: ", call1.request().url().toString());
+
+        call1.enqueue(new Callback<List<Movimiento>>() {
+            @Override
+            public void onResponse(Call<List<Movimiento>> call, Response<List<Movimiento>> response) {
+                Log.i("Status Code", String.valueOf(response.code()));
+                Log.i("Body", String.valueOf(response.body()));
+            }
+
+            @Override
+            public void onFailure(Call<List<Movimiento>> call, Throwable t) {
+                Log.i("Error", t.toString());
+            }
+        });
+
+        Movimiento mov = new Movimiento();
+        mov.setFecha("15/06/2017");
+        mov.setVta(new Vta(1550F, 120.55F));
+        mov.setVisitas(15);
+        mov.setVentas(10);
+
+        Call<Movimiento> call2 = service.putMovimiento("59414611263e911bb7712efd", mov);
+
+        Log.i("Endpoint URL: ", call2.request().url().toString());
+        Log.i("Endpoint URL Body: ", call2.request().body().contentType().toString());
+
+        call2.enqueue(new Callback<Movimiento>() {
+            @Override
+            public void onResponse(Call<Movimiento> call, Response<Movimiento> response) {
+                Log.i("Status Code", String.valueOf(response.code()));
+                Log.i("Body", String.valueOf(response.body()));
+            }
+
+            @Override
+            public void onFailure(Call<Movimiento> call, Throwable t) {
+                Log.i("Error", t.toString());
+            }
+        });
     }
 
     @Override
@@ -105,12 +163,13 @@ public class MainActivity extends AppCompatActivity {
             String uid = mAuth.getCurrentUser().getUid();
             Float kilos = Float.valueOf(kilosField.getText().toString());
             Float pesos = Float.valueOf(pesosField.getText().toString());
+            Float precioMe = pesos / kilos;
             Integer visitas = Integer.valueOf(visitasField.getText().toString());
             Integer ventas = Integer.valueOf(ventasField.getText().toString());
 
-            Venta venta = new Venta(uid, kilos, pesos, visitas, ventas);
+            Movimiento movimiento = new Movimiento();
 
-            mDatabase.push().setValue(venta);
+            mDatabase.push().setValue(movimiento);
 
             kilosField.setText("");
             pesosField.setText("");
@@ -119,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
             kilosField.requestFocus();
 
-            Toast.makeText(MainActivity.this, "Venta cargada exitosamente.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Movimiento cargada exitosamente.", Toast.LENGTH_SHORT).show();
 
         } else {
 
