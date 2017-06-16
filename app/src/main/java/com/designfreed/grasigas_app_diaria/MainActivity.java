@@ -1,7 +1,6 @@
 package com.designfreed.grasigas_app_diaria;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,12 +10,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.designfreed.grasigas_app_diaria.model.Chofer;
 import com.designfreed.grasigas_app_diaria.model.Movimiento;
 import com.designfreed.grasigas_app_diaria.model.Vta;
 import com.designfreed.grasigas_app_diaria.service.MovimientoService;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -40,9 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText ventasField;
     private Button cargarBtn;
 
-    private DatabaseReference mDatabase;
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private Chofer currentUser;
 
     private MovimientoService service;
 
@@ -56,51 +51,46 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, "onCreate()");
 
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        httpClient.addInterceptor(new Interceptor() {
-            @Override
-            public okhttp3.Response intercept(Chain chain) throws IOException {
-                Request original = chain.request();
+        currentUser = (Chofer) getIntent().getSerializableExtra("user");
 
-                String credentials = Credentials.basic("33899255", "maximati");
+        if (currentUser == null) {
 
-                Request request = original.newBuilder()
-                        .header("Authorization", credentials)
-                        .method(original.method(), original.body())
-                        .build();
+            Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+            loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(loginIntent);
 
-                return chain.proceed(request);
-            }
-        });
+        } else {
 
-        OkHttpClient client = httpClient.build();
+            OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+            httpClient.addInterceptor(new Interceptor() {
+                @Override
+                public okhttp3.Response intercept(Chain chain) throws IOException {
+                    Request original = chain.request();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(SERVER_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
-                .build();
+                    String username = currentUser.getDni();
+                    String password = currentUser.getPassword();
 
-        mAuth = FirebaseAuth.getInstance();
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser() == null) {
+                    String credentials = Credentials.basic(username, password);
 
-                    Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-                    loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(loginIntent);
+                    Request request = original.newBuilder()
+                            .header("Authorization", credentials)
+                            .method(original.method(), original.body())
+                            .build();
 
-                } else {
-
-
-
+                    return chain.proceed(request);
                 }
-            }
-        };
+            });
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("ventas");
-        mDatabase.keepSynced(true);
+            OkHttpClient client = httpClient.build();
+
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(SERVER_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(client)
+                    .build();
+
+            service = retrofit.create(MovimientoService.class);
+        }
 
         kilosField = (EditText) findViewById(R.id.kilos_field);
         pesosField = (EditText) findViewById(R.id.pesos_field);
@@ -114,8 +104,6 @@ public class MainActivity extends AppCompatActivity {
                 cargarVentas();
             }
         });
-
-        service = retrofit.create(MovimientoService.class);
     }
 
     @Override
@@ -123,8 +111,6 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         Log.d(TAG, "onStart()");
-
-        mAuth.addAuthStateListener(mAuthStateListener);
     }
 
     @Override
@@ -132,8 +118,6 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
 
         Log.d(TAG, "onStop()");
-
-        mAuth.removeAuthStateListener(mAuthStateListener);
     }
 
     @Override
@@ -167,15 +151,21 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<Movimiento> call, Response<Movimiento> response) {
                     if (response.code() == 200) {
+
                         Log.d("Http Response", "Code: " + String.valueOf(response.code()) + " Message: " + response.message());
+
                     }
 
                     if (response.code() == 401) {
+
                         Log.d("Http Response", "Code: " + String.valueOf(response.code()) + " Message: " + response.message());
+
                     }
 
                     if (response.code() == 500) {
+
                         Log.d("Http Response", "Code: " + String.valueOf(response.code()) + " Message: " + response.message());
+
                     }
                 }
 

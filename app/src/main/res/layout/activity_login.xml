@@ -7,20 +7,20 @@
     tools:context="com.designfreed.grasigas_app_diaria.LoginActivity">
 
     <EditText
-        android:id="@+id/email_field"
+        android:id="@+id/dni_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:padding="10dp"
         android:background="@drawable/edit_text"
-        android:inputType="textEmailAddress"
+        android:inputType="number"
         android:hint="Email"/>
 
     <EditText
         android:id="@+id/password_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/email_field"
+        android:layout_below="@id/dni_field"
         android:padding="10dp"
         android:background="@drawable/edit_text"
         android:inputType="textPassword"
