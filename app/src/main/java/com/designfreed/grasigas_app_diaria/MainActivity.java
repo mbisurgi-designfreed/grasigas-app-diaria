@@ -19,8 +19,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import okhttp3.Credentials;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,7 +44,10 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
+    private MovimientoService service;
+
     private static final String TAG = "MainActivity";
+    private static final String SERVER_URL = "http://192.168.0.3:3000/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +55,31 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Log.d(TAG, "onCreate()");
+
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.addInterceptor(new Interceptor() {
+            @Override
+            public okhttp3.Response intercept(Chain chain) throws IOException {
+                Request original = chain.request();
+
+                String credentials = Credentials.basic("33899255", "maximati");
+
+                Request request = original.newBuilder()
+                        .header("Authorization", credentials)
+                        .method(original.method(), original.body())
+                        .build();
+
+                return chain.proceed(request);
+            }
+        });
+
+        OkHttpClient client = httpClient.build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(SERVER_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build();
 
         mAuth = FirebaseAuth.getInstance();
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
@@ -82,53 +115,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.3:3000/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        MovimientoService service = retrofit.create(MovimientoService.class);
-
-        Call<List<Movimiento>> call1 = service.getMovimientos("14/06/2017", "15/06/2017");
-
-        Log.i("Endpoint URL: ", call1.request().url().toString());
-
-        call1.enqueue(new Callback<List<Movimiento>>() {
-            @Override
-            public void onResponse(Call<List<Movimiento>> call, Response<List<Movimiento>> response) {
-                Log.i("Status Code", String.valueOf(response.code()));
-                Log.i("Body", String.valueOf(response.body()));
-            }
-
-            @Override
-            public void onFailure(Call<List<Movimiento>> call, Throwable t) {
-                Log.i("Error", t.toString());
-            }
-        });
-
-        Movimiento mov = new Movimiento();
-        mov.setFecha("15/06/2017");
-        mov.setVta(new Vta(1550F, 120.55F));
-        mov.setVisitas(15);
-        mov.setVentas(10);
-
-        Call<Movimiento> call2 = service.putMovimiento("59414611263e911bb7712efd", mov);
-
-        Log.i("Endpoint URL: ", call2.request().url().toString());
-        Log.i("Endpoint URL Body: ", call2.request().body().contentType().toString());
-
-        call2.enqueue(new Callback<Movimiento>() {
-            @Override
-            public void onResponse(Call<Movimiento> call, Response<Movimiento> response) {
-                Log.i("Status Code", String.valueOf(response.code()));
-                Log.i("Body", String.valueOf(response.body()));
-            }
-
-            @Override
-            public void onFailure(Call<Movimiento> call, Throwable t) {
-                Log.i("Error", t.toString());
-            }
-        });
+        service = retrofit.create(MovimientoService.class);
     }
 
     @Override
@@ -160,16 +147,43 @@ public class MainActivity extends AppCompatActivity {
 
         if (!TextUtils.isEmpty(kilosField.getText()) && !TextUtils.isEmpty(pesosField.getText()) && !TextUtils.isEmpty(visitasField.getText()) && !TextUtils.isEmpty(ventasField.getText())) {
 
-            String uid = mAuth.getCurrentUser().getUid();
             Float kilos = Float.valueOf(kilosField.getText().toString());
             Float pesos = Float.valueOf(pesosField.getText().toString());
             Float precioMe = pesos / kilos;
             Integer visitas = Integer.valueOf(visitasField.getText().toString());
             Integer ventas = Integer.valueOf(ventasField.getText().toString());
 
-            Movimiento movimiento = new Movimiento();
+            Movimiento mov = new Movimiento();
+            mov.setFecha(formatDate(new Date()));
+            mov.setVta(new Vta(kilos, precioMe));
+            mov.setVisitas(visitas);
+            mov.setVentas(ventas);
 
-            mDatabase.push().setValue(movimiento);
+            String choferId = "";
+
+            Call<Movimiento> call = service.putMovimiento(choferId, mov);
+
+            call.enqueue(new Callback<Movimiento>() {
+                @Override
+                public void onResponse(Call<Movimiento> call, Response<Movimiento> response) {
+                    if (response.code() == 200) {
+                        Log.d("Http Response", "Code: " + String.valueOf(response.code()) + " Message: " + response.message());
+                    }
+
+                    if (response.code() == 401) {
+                        Log.d("Http Response", "Code: " + String.valueOf(response.code()) + " Message: " + response.message());
+                    }
+
+                    if (response.code() == 500) {
+                        Log.d("Http Response", "Code: " + String.valueOf(response.code()) + " Message: " + response.message());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Movimiento> call, Throwable t) {
+                    Log.i("Http Response", t.toString());
+                }
+            });
 
             kilosField.setText("");
             pesosField.setText("");
@@ -186,4 +200,11 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
+    private String formatDate(Date date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
+        return formatter.format(date);
+    }
+
 }

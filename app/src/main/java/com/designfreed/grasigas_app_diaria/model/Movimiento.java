@@ -71,12 +71,6 @@ public class Movimiento {
         this.ventas = ventas;
     }
 
-    private String formatDate(Date date) {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-
-        return formatter.format(date);
-    }
-
     @Override
     public String toString() {
         return "Movimiento{" +
