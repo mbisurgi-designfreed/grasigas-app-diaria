@@ -2,7 +2,6 @@ package com.designfreed.grasigas_app_diaria;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,10 +13,6 @@ import android.widget.Toast;
 
 import com.designfreed.grasigas_app_diaria.model.Chofer;
 import com.designfreed.grasigas_app_diaria.service.ChoferService;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,8 +25,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText dniField;
     private EditText passwordField;
     private Button loginBtn;
-
-    private FirebaseAuth mAuth;
 
     private ProgressDialog mProgress;
 
@@ -106,6 +99,8 @@ public class LoginActivity extends AppCompatActivity {
                         Chofer chofer = response.body();
 
                         if (chofer.getPassword().equals(password)) {
+
+                            mProgress.dismiss();
 
                             Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                             mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
