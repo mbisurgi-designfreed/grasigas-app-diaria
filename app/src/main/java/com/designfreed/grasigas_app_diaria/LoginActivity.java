@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.designfreed.grasigas_app_diaria.model.Chofer;
+import com.designfreed.grasigas_app_diaria.service.AuthService;
 import com.designfreed.grasigas_app_diaria.service.ChoferService;
 
 import retrofit2.Call;
@@ -31,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     private ChoferService service;
 
     private static final String TAG = "LoginActivity";
-    private static final String SERVER_URL = "http://192.168.0.3:3000/";
+    private static final String SERVER_URL = "http://192.168.0.6:3000/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,9 +103,10 @@ public class LoginActivity extends AppCompatActivity {
 
                             mProgress.dismiss();
 
+                            AuthService.getInstance().setCurrentUser(chofer);
+
                             Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                             mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            mainIntent.putExtra("user", chofer);
                             startActivity(mainIntent);
 
                         } else {

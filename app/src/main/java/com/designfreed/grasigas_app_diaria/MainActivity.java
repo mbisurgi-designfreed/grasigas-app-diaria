@@ -10,9 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.designfreed.grasigas_app_diaria.model.Chofer;
 import com.designfreed.grasigas_app_diaria.model.Movimiento;
 import com.designfreed.grasigas_app_diaria.model.Vta;
+import com.designfreed.grasigas_app_diaria.service.AuthService;
 import com.designfreed.grasigas_app_diaria.service.MovimientoService;
 
 import java.io.IOException;
@@ -37,12 +37,10 @@ public class MainActivity extends AppCompatActivity {
     private EditText ventasField;
     private Button cargarBtn;
 
-    private Chofer currentUser;
-
     private MovimientoService service;
 
     private static final String TAG = "MainActivity";
-    private static final String SERVER_URL = "http://192.168.0.3:3000/";
+    private static final String SERVER_URL = "http://192.168.0.6:3000/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, "onCreate()");
 
-        currentUser = (Chofer) getIntent().getSerializableExtra("user");
-
-        if (currentUser == null) {
+        if (AuthService.getInstance().getCurrentUser() == null) {
 
             Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
             loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -67,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
                 public okhttp3.Response intercept(Chain chain) throws IOException {
                     Request original = chain.request();
 
-                    String username = currentUser.getDni();
-                    String password = currentUser.getPassword();
+                    String username = AuthService.getInstance().getCurrentUser().getDni();
+                    String password = AuthService.getInstance().getCurrentUser().getPassword();
 
                     String credentials = Credentials.basic(username, password);
 
@@ -143,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
             mov.setVisitas(visitas);
             mov.setVentas(ventas);
 
-            String choferId = "";
+            String choferId = AuthService.getInstance().getCurrentUser().get_id();
 
             Call<Movimiento> call = service.putMovimiento(choferId, mov);
 
