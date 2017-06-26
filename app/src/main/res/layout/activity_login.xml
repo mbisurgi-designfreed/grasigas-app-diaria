@@ -14,7 +14,7 @@
         android:padding="10dp"
         android:background="@drawable/edit_text"
         android:inputType="number"
-        android:hint="Email"/>
+        android:hint="DNI"/>
 
     <EditText
         android:id="@+id/password_field"

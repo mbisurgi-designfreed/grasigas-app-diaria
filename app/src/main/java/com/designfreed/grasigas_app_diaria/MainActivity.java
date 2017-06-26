@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private MovimientoService service;
 
     private static final String TAG = "MainActivity";
-    private static final String SERVER_URL = "http://192.168.0.6:3000/";
+    private static final String SERVER_URL = "https://intense-tor-11265.herokuapp.com/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
