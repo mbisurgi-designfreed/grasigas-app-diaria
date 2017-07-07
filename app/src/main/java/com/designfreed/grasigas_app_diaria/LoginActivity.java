@@ -105,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             AuthService.getInstance().setCurrentUser(chofer);
 
-                            Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                            Intent mainIntent = new Intent(LoginActivity.this, ReportActivity.class);
                             mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(mainIntent);
 

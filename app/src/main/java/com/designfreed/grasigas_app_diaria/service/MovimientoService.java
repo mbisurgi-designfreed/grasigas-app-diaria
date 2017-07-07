@@ -15,6 +15,9 @@ public interface MovimientoService {
     @GET("api/movimientos")
     Call<List<Movimiento>> getMovimientos(@Query("desde") String desde, @Query("hasta") String hasta);
 
+    @GET("api/movimientos/{choferId}")
+    Call<List<Movimiento>> getMovimientosChofer(@Path("choferId") String choferId, @Query("desde") String desde, @Query("hasta") String hasta);
+
     @PUT("api/movimientos/{choferId}")
     Call<Movimiento> putMovimiento(@Path("choferId") String choferId, @Body Movimiento movimiento);
 }

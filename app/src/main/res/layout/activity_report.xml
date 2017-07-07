@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context="com.designfreed.grasigas_app_diaria.ReportActivity">
+
+    <TextView
+        android:id="@+id/diario_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="@drawable/text_view"
+        android:textStyle="bold"
+        android:text="Diario"/>
+
+    <LinearLayout
+        android:id="@+id/diario_layout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/diario_text">
+
+        <LinearLayout
+            android:id="@+id/diario_layout_titulos"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/diario_text">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:inputType="numberDecimal"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:text="Vta"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:text="Pto"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:text="Dif"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/diario_layout_valores"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/diario_text">
+
+            <TextView
+                android:id="@+id/diario_vta_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:inputType="numberDecimal"
+                android:textAlignment="textEnd"
+                tools:text="100.55"/>
+
+            <TextView
+                android:id="@+id/diario_pto_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:inputType="numberDecimal"
+                android:textAlignment="textEnd"
+                tools:text="150.55"/>
+
+            <TextView
+                android:id="@+id/diario_dif_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:inputType="numberDecimal"
+                android:textAlignment="textEnd"
+                tools:text="50.00"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/mensual_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/diario_layout"
+        android:padding="10dp"
+        android:background="@drawable/text_view"
+        android:textStyle="bold"
+        android:text="Mensual"/>
+
+    <LinearLayout
+        android:id="@+id/mensual_layout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mensual_text">
+
+        <LinearLayout
+            android:id="@+id/mensual_layout_titulos"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/diario_text">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:inputType="numberDecimal"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:text="Vta"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:text="Pto"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:text="Dif"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mensual_layout_valores"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/diario_text">
+
+            <TextView
+                android:id="@+id/mensual_vta_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:inputType="numberDecimal"
+                android:textAlignment="textEnd"
+                tools:text="100.55"/>
+
+            <TextView
+                android:id="@+id/mensual_pto_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:inputType="numberDecimal"
+                android:textAlignment="textEnd"
+                tools:text="150.55"/>
+
+            <TextView
+                android:id="@+id/mensual_dif_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:inputType="numberDecimal"
+                android:textAlignment="textEnd"
+                tools:text="50.00"/>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
