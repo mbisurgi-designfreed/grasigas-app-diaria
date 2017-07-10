@@ -7,9 +7,20 @@
     tools:context="com.designfreed.grasigas_app_diaria.MainActivity">
 
     <EditText
+        android:id="@+id/fecha_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:padding="10dp"
+        android:background="@drawable/edit_text"
+        android:inputType="datetime"
+        android:hint="Fecha"/>
+
+    <EditText
         android:id="@+id/kilos_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/fecha_field"
         android:layout_marginBottom="16dp"
         android:padding="10dp"
         android:background="@drawable/edit_text"
@@ -38,6 +49,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:textStyle="bold"
+            android:textSize="16dp"
             android:text="Cantidad de Clientes"/>
 
         <LinearLayout

@@ -1,5 +1,6 @@
 package com.designfreed.grasigas_app_diaria;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -16,7 +18,9 @@ import com.designfreed.grasigas_app_diaria.service.AuthService;
 import com.designfreed.grasigas_app_diaria.service.MovimientoService;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import okhttp3.Credentials;
@@ -31,6 +35,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
+    private EditText fechaField;
     private EditText kilosField;
     private EditText pesosField;
     private EditText visitasField;
@@ -88,10 +93,34 @@ public class MainActivity extends AppCompatActivity {
             service = retrofit.create(MovimientoService.class);
         }
 
+        fechaField = (EditText) findViewById(R.id.fecha_field);
         kilosField = (EditText) findViewById(R.id.kilos_field);
         pesosField = (EditText) findViewById(R.id.pesos_field);
         visitasField = (EditText) findViewById(R.id.visitas_field);
         ventasField = (EditText) findViewById(R.id.ventas_field);
+
+        fechaField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar calendar = Calendar.getInstance();
+
+                int yy = calendar.get(Calendar.YEAR);
+                int mm = calendar.get(Calendar.MONTH);
+                int dd = calendar.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePicker = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int day) {
+                        Calendar cal = Calendar.getInstance();
+                        cal.set(year, month, day);
+
+                        fechaField.setText(formatDate(cal.getTime()));
+                    }
+                }, yy, mm, dd);
+
+                datePicker.show();
+            }
+        });
 
         cargarBtn = (Button) findViewById(R.id.cargar_btn);
         cargarBtn.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (!TextUtils.isEmpty(kilosField.getText()) && !TextUtils.isEmpty(pesosField.getText()) && !TextUtils.isEmpty(visitasField.getText()) && !TextUtils.isEmpty(ventasField.getText())) {
 
+            String fecha = fechaField.getText().toString();
             Float kilos = Float.valueOf(kilosField.getText().toString());
             Float pesos = Float.valueOf(pesosField.getText().toString());
             Float precioMe = pesos / kilos;
@@ -134,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
             Integer ventas = Integer.valueOf(ventasField.getText().toString());
 
             Movimiento mov = new Movimiento();
-            mov.setFecha(formatDate(new Date()));
+            mov.setFecha(fecha);
             mov.setVta(new Vta(kilos, precioMe));
             mov.setVisitas(visitas);
             mov.setVentas(ventas);

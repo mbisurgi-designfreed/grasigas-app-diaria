@@ -1,6 +1,7 @@
 package com.designfreed.grasigas_app_diaria;
 
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,10 +15,9 @@ import com.designfreed.grasigas_app_diaria.service.AuthService;
 import com.designfreed.grasigas_app_diaria.service.MovimientoService;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -36,9 +36,11 @@ public class ReportActivity extends AppCompatActivity {
     private TextView kilosDiarioVtaText;
     private TextView kilosDiarioPtoText;
     private TextView kilosDiarioDifText;
+    private TextView kilosDiarioDifPorText;
     private TextView kilosMensualVtaText;
     private TextView kilosMensualPtoText;
     private TextView kilosMensualDifText;
+    private TextView kilosMensualDifPorText;
 
     private MovimientoService service;
 
@@ -55,9 +57,11 @@ public class ReportActivity extends AppCompatActivity {
         kilosDiarioVtaText = (TextView) findViewById(R.id.diario_vta_text);
         kilosDiarioPtoText = (TextView) findViewById(R.id.diario_pto_text);
         kilosDiarioDifText = (TextView) findViewById(R.id.diario_dif_text);
+        kilosDiarioDifPorText = (TextView) findViewById(R.id.diario_dif_por_text);
         kilosMensualVtaText = (TextView) findViewById(R.id.mensual_vta_text);
         kilosMensualPtoText = (TextView) findViewById(R.id.mensual_pto_text);
         kilosMensualDifText = (TextView) findViewById(R.id.mensual_dif_text);
+        kilosMensualDifPorText = (TextView) findViewById(R.id.mensual_dif_por_text);
 
         if (AuthService.getInstance().getCurrentUser() == null) {
 
@@ -172,6 +176,7 @@ public class ReportActivity extends AppCompatActivity {
                     Float diarioVta = diario.getVta().getKilos();
                     Float diarioPto = diario.getPto().getKilos();
                     Float diarioDif = diarioVta - diarioPto;
+                    Float diarioDifPor = diarioDif / diarioPto;
 
                     Float mensualVta = 0F;
                     Float mensualPto = 0F;
@@ -192,14 +197,25 @@ public class ReportActivity extends AppCompatActivity {
                     }
 
                     Float mensualDif = mensualVta - mensualPto;
+                    Float mensualDifPor = mensualDif / mensualPto;
 
-                    kilosDiarioVtaText.setText(diarioVta.toString());
-                    kilosDiarioPtoText.setText(diarioPto.toString());
-                    kilosDiarioDifText.setText(diarioDif.toString());
+                    NumberFormat formatNumber = NumberFormat.getNumberInstance();
+                    formatNumber.setMinimumFractionDigits(2);
 
-                    kilosMensualVtaText.setText(mensualVta.toString());
-                    kilosMensualPtoText.setText(mensualPto.toString());
-                    kilosMensualDifText.setText(mensualDif.toString());
+                    NumberFormat formatPercentaje = NumberFormat.getPercentInstance();
+                    formatPercentaje.setMinimumFractionDigits(0);
+
+                    kilosDiarioVtaText.setText(formatNumber.format(diarioVta));
+                    kilosDiarioPtoText.setText(formatNumber.format(diarioPto));
+                    kilosDiarioDifText.setText(formatNumber.format(diarioDif));
+                    kilosDiarioDifPorText.setText(formatPercentaje.format(diarioDifPor));
+                    kilosDiarioDifPorText.setTextColor(getDifColor(diarioDif));
+
+                    kilosMensualVtaText.setText(formatNumber.format(mensualVta));
+                    kilosMensualPtoText.setText(formatNumber.format(mensualPto));
+                    kilosMensualDifText.setText(formatNumber.format(mensualDif));
+                    kilosMensualDifPorText.setText(formatPercentaje.format(mensualDifPor));
+                    kilosMensualDifPorText.setTextColor(getDifColor(mensualDif));
 
                 }
             }
@@ -235,6 +251,16 @@ public class ReportActivity extends AppCompatActivity {
         }
 
         return null;
+    }
+
+    private int getDifColor(Float dif) {
+        int estadoResourceColorId = R.color.green;
+
+        if (dif < 0) {
+            estadoResourceColorId = R.color.red;
+        }
+
+        return ContextCompat.getColor(getApplicationContext(), estadoResourceColorId);
     }
 
 }

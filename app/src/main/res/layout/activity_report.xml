@@ -14,6 +14,7 @@
         android:padding="10dp"
         android:background="@drawable/text_view"
         android:textStyle="bold"
+        android:textSize="16dp"
         android:text="Diario"/>
 
     <LinearLayout
@@ -38,6 +39,7 @@
                 android:inputType="numberDecimal"
                 android:textAlignment="center"
                 android:textStyle="bold"
+                android:textSize="16dp"
                 android:text="Vta"/>
 
             <TextView
@@ -47,6 +49,7 @@
                 android:padding="10dp"
                 android:textAlignment="center"
                 android:textStyle="bold"
+                android:textSize="16dp"
                 android:text="Pto"/>
 
             <TextView
@@ -56,8 +59,18 @@
                 android:padding="10dp"
                 android:textAlignment="center"
                 android:textStyle="bold"
+                android:textSize="16dp"
                 android:text="Dif"/>
 
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:padding="10dp"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                android:text="%"/>
         </LinearLayout>
 
         <LinearLayout
@@ -75,6 +88,7 @@
                 android:padding="10dp"
                 android:inputType="numberDecimal"
                 android:textAlignment="textEnd"
+                android:textSize="16dp"
                 tools:text="100.55"/>
 
             <TextView
@@ -85,6 +99,7 @@
                 android:padding="10dp"
                 android:inputType="numberDecimal"
                 android:textAlignment="textEnd"
+                android:textSize="16dp"
                 tools:text="150.55"/>
 
             <TextView
@@ -95,7 +110,20 @@
                 android:padding="10dp"
                 android:inputType="numberDecimal"
                 android:textAlignment="textEnd"
+                android:textSize="16dp"
                 tools:text="50.00"/>
+
+            <TextView
+                android:id="@+id/diario_dif_por_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:padding="10dp"
+                android:inputType="numberDecimal"
+                android:textAlignment="textEnd"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                tools:text="10 %"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -107,6 +135,7 @@
         android:padding="10dp"
         android:background="@drawable/text_view"
         android:textStyle="bold"
+        android:textSize="16dp"
         android:text="Mensual"/>
 
     <LinearLayout
@@ -131,6 +160,7 @@
                 android:inputType="numberDecimal"
                 android:textAlignment="center"
                 android:textStyle="bold"
+                android:textSize="16dp"
                 android:text="Vta"/>
 
             <TextView
@@ -140,6 +170,7 @@
                 android:padding="10dp"
                 android:textAlignment="center"
                 android:textStyle="bold"
+                android:textSize="16dp"
                 android:text="Pto"/>
 
             <TextView
@@ -149,8 +180,18 @@
                 android:padding="10dp"
                 android:textAlignment="center"
                 android:textStyle="bold"
+                android:textSize="16dp"
                 android:text="Dif"/>
 
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:padding="10dp"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                android:text="%"/>
         </LinearLayout>
 
         <LinearLayout
@@ -168,7 +209,8 @@
                 android:padding="10dp"
                 android:inputType="numberDecimal"
                 android:textAlignment="textEnd"
-                tools:text="100.55"/>
+                android:textSize="16dp"
+                tools:text="22550.55"/>
 
             <TextView
                 android:id="@+id/mensual_pto_text"
@@ -178,7 +220,8 @@
                 android:padding="10dp"
                 android:inputType="numberDecimal"
                 android:textAlignment="textEnd"
-                tools:text="150.55"/>
+                android:textSize="16dp"
+                tools:text="37000.00"/>
 
             <TextView
                 android:id="@+id/mensual_dif_text"
@@ -188,7 +231,20 @@
                 android:padding="10dp"
                 android:inputType="numberDecimal"
                 android:textAlignment="textEnd"
+                android:textSize="16dp"
                 tools:text="50.00"/>
+
+            <TextView
+                android:id="@+id/mensual_dif_por_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:padding="10dp"
+                android:inputType="numberDecimal"
+                android:textAlignment="textEnd"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                tools:text="10 %"/>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
