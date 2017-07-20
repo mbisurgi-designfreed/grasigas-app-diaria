@@ -33,10 +33,11 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ReportActivity extends AppCompatActivity {
-    private TextView kilosDiarioVtaText;
-    private TextView kilosDiarioPtoText;
-    private TextView kilosDiarioDifText;
-    private TextView kilosDiarioDifPorText;
+    private TextView kilosDiaPtoText;
+    private TextView kilosDiaAnteriorVtaText;
+    private TextView kilosDiaAnteriorPtoText;
+    private TextView kilosDiaAnteriorDifText;
+    private TextView kilosDiaAnteriorDifPorText;
     private TextView kilosMensualVtaText;
     private TextView kilosMensualPtoText;
     private TextView kilosMensualDifText;
@@ -54,10 +55,11 @@ public class ReportActivity extends AppCompatActivity {
 
         Log.d(TAG, "onCreate()");
 
-        kilosDiarioVtaText = (TextView) findViewById(R.id.diario_vta_text);
-        kilosDiarioPtoText = (TextView) findViewById(R.id.diario_pto_text);
-        kilosDiarioDifText = (TextView) findViewById(R.id.diario_dif_text);
-        kilosDiarioDifPorText = (TextView) findViewById(R.id.diario_dif_por_text);
+        kilosDiaPtoText = (TextView) findViewById(R.id.diario_pto_text);
+        kilosDiaAnteriorVtaText = (TextView) findViewById(R.id.dia_anterior_vta_text);
+        kilosDiaAnteriorPtoText = (TextView) findViewById(R.id.dia_anterior_pto_text);
+        kilosDiaAnteriorDifText = (TextView) findViewById(R.id.dia_anterior_dif_text);
+        kilosDiaAnteriorDifPorText = (TextView) findViewById(R.id.dia_anterior_dif_por_text);
         kilosMensualVtaText = (TextView) findViewById(R.id.mensual_vta_text);
         kilosMensualPtoText = (TextView) findViewById(R.id.mensual_pto_text);
         kilosMensualDifText = (TextView) findViewById(R.id.mensual_dif_text);
@@ -171,16 +173,33 @@ public class ReportActivity extends AppCompatActivity {
 
                     Log.d("Http Response", "Code: " + String.valueOf(response.code()) + " Message: " + response.message());
 
-                    Movimiento diario = response.body().get(response.body().size() - 1);
+                    Movimiento anterior = getMovimientoAnterior(response.body());
+                    Movimiento diario = getMovimientoDiario(response.body());
 
-                    Float diarioVta = diario.getVta().getKilos();
-                    Float diarioPto = diario.getPto().getKilos();
-                    Float diarioDif = diarioVta - diarioPto;
-                    Float diarioDifPor = diarioDif / diarioPto;
+                    Float diarioVta = 0F;
+                    Float diarioPto = 0F;
+                    Float diarioDif = 0F;
+                    Float diarioDifPor = 0F;
+
+                    if (anterior != null && anterior.getVta() != null) {
+
+                        diarioVta = anterior.getVta().getKilos();
+                        diarioPto = anterior.getPto().getKilos();
+                        diarioDif = diarioVta - diarioPto;
+                        diarioDifPor = diarioDif / diarioPto;
+
+                    }
+
+                    if (anterior != null && anterior.getVta() == null) {
+
+                        diarioPto = anterior.getPto().getKilos();
+                        diarioDif = diarioVta - diarioPto;
+                        diarioDifPor = diarioDif / diarioPto;
+
+                    }
 
                     Float mensualVta = 0F;
                     Float mensualPto = 0F;
-
 
                     for (Movimiento mov: response.body()) {
                         if (mov.getVta() != null) {
@@ -205,11 +224,13 @@ public class ReportActivity extends AppCompatActivity {
                     NumberFormat formatPercentaje = NumberFormat.getPercentInstance();
                     formatPercentaje.setMinimumFractionDigits(0);
 
-                    kilosDiarioVtaText.setText(formatNumber.format(diarioVta));
-                    kilosDiarioPtoText.setText(formatNumber.format(diarioPto));
-                    kilosDiarioDifText.setText(formatNumber.format(diarioDif));
-                    kilosDiarioDifPorText.setText(formatPercentaje.format(diarioDifPor));
-                    kilosDiarioDifPorText.setTextColor(getDifColor(diarioDif));
+                    kilosDiaPtoText.setText(formatNumber.format(diario.getPto().getKilos()));
+
+                    kilosDiaAnteriorVtaText.setText(formatNumber.format(diarioVta));
+                    kilosDiaAnteriorPtoText.setText(formatNumber.format(diarioPto));
+                    kilosDiaAnteriorDifText.setText(formatNumber.format(diarioDif));
+                    kilosDiaAnteriorDifPorText.setText(formatPercentaje.format(diarioDifPor));
+                    kilosDiaAnteriorDifPorText.setTextColor(getDifColor(diarioDif));
 
                     kilosMensualVtaText.setText(formatNumber.format(mensualVta));
                     kilosMensualPtoText.setText(formatNumber.format(mensualPto));
@@ -233,6 +254,45 @@ public class ReportActivity extends AppCompatActivity {
         cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
 
         return cal.getTime();
+    }
+
+    private Movimiento getMovimientoAnterior(List<Movimiento> movimientos) {
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(new Date());
+        cal1.add(Calendar.DATE, -1);
+
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(new Date());
+
+        Date fecha = new Date();
+
+        if (cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH)) {
+
+            fecha = cal1.getTime();
+
+        }
+
+        for (Movimiento mov: movimientos) {
+            if (mov.getFecha().equals(formatDateString(fecha))) {
+
+                return mov;
+
+            }
+        }
+
+        return null;
+    }
+
+    private Movimiento getMovimientoDiario(List<Movimiento> movimientos) {
+        for (Movimiento mov: movimientos) {
+            if (mov.getFecha().equals(formatDateString(new Date()))) {
+
+                return mov;
+
+            }
+        }
+
+        return null;
     }
 
     private String formatDateString(Date date) {
